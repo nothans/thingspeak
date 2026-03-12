@@ -1,3 +1,5 @@
+if defined?(ActiveAdmin)
+
 ActiveAdmin.setup do |config|
 
   # == Site Title
@@ -237,4 +239,6 @@ ActiveAdmin.setup do |config|
   # config.filters = false
 
 end
+
+end # if defined?(ActiveAdmin)
 

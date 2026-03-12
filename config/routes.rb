@@ -1,8 +1,10 @@
 Thingspeak::Application.routes.draw do
 
-  # admin routes
-  devise_for :admin_users, ActiveAdmin::Devise.config
-  ActiveAdmin.routes(self)
+  # admin routes (activeadmin disabled)
+  if defined?(ActiveAdmin)
+    devise_for :admin_users, ActiveAdmin::Devise.config
+    ActiveAdmin.routes(self)
+  end
 
   # main data posts using this route
   match 'update', :to => 'channels#post_data', :via => ((GET_SUPPORT) ? [:get, :post] : :post)
@@ -132,8 +134,6 @@ Thingspeak::Application.routes.draw do
 
   resources :devices do
     member do
-      get :thingtweet_arduino_code
-      get :thingtweet_arduino_select_thingtweet
       post :add_mac_address
       put :ajax_update
     end
@@ -141,27 +141,11 @@ Thingspeak::Application.routes.draw do
 
   resources :pipes
 
-  # twitter status update (version 1)
-  match 'apps/thingtweet/1/statuses/update(.:format)' => 'thingtweets#update', :via => [:get, :post]
-  match 'apps/thingtweet/1/statuses/update_debug(.:format)' => 'thingtweets#update_debug', :via => [:get, :post]
-
-
   # thinghttp action
   match 'apps/thinghttp/send_request' => 'thinghttp#send_request', :via => [:get, :post]
 
-  # process responses for tweetcontrol
-  match 'apps/tweetcontrol/process_response' => 'tweetcontrol#process_response', :via => [:get, :post]
-
   # apps and nested controllers
   scope 'apps' do
-    resources :thingtweets do
-      collection do
-        get :authorize_response
-      end
-      member do
-        put :new_api_key
-      end
-    end
     resources :thinghttp do
       resources :header
       member do
@@ -173,7 +157,6 @@ Thingspeak::Application.routes.draw do
         put :new_api_key
       end
     end
-    resources :tweetcontrol
     resources :reacts
     resources :timecontrols
   end
@@ -198,7 +181,6 @@ Thingspeak::Application.routes.draw do
   get 'admin/emails', :as => 'admin_emails', :to => 'admin/users#emails'
 
   # app shortcuts
-  get 'apps/thingtweet', :to => 'thingtweets#index'
   get 'apps/react', :to => 'react#index'
 
   # docs

@@ -380,14 +380,6 @@ class ChannelsController < ApplicationController
         rescue
         end
 
-        # check for tweet
-        if params[:twitter] && params[:tweet]
-          # check username
-          twitter_account = TwitterAccount.find_by_user_id_and_screen_name(api_key.user_id, params[:twitter])
-          if twitter_account
-            twitter_account.tweet(params[:tweet])
-          end
-        end
       else
         raise "Channel or Feed didn't save correctly"
       end

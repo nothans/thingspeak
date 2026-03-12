@@ -6,26 +6,10 @@
     <div class="col-pad">
 
       <div class="apps">
-        <%= link_to thingtweets_path do %>
-          <%= image_tag 'thingtweet.png', :size => '104x104' %>
-          <br>
-          <%= t(:thingtweet) %>
-        <% end %>
-      </div>
-
-      <div class="apps">
         <%= link_to thinghttp_index_path do %>
           <%= image_tag 'thinghttp.png', :size => '104x104' %>
           <br>
           <%= t(:thinghttp) %>
-        <% end %>
-      </div>
-
-      <div class="apps">
-        <%= link_to tweetcontrol_index_path do %>
-          <%= image_tag 'tweetcontrol.png', :size => '104x104' %>
-          <br>
-          <%= t(:tweetcontrol) %>
         <% end %>
       </div>
 
@@ -63,17 +47,6 @@
     <div class="col-pad">
 
       <h3>
-        <%= t(:thingtweet) %>
-        <div class="helplink">(<a href="/docs/thingtweet/"><%= t(:help_options) %></a>)</div>
-      </h3>
-      <%= t(:help_apps_thingtweet) %>
-      <ul>
-        <li><a href="http://community.thingspeak.com/tutorials/arduino/update-twitter-with-thingtweet-and-arduino-ethernet-shield/">Arduino Tutorial</a></li>
-        <li><a href="http://community.thingspeak.com/tutorials/iobridge/updating-a-twitter-status-using-the-thingtweet-app-and-iobridge-io-204/">ioBridge Tutorial</a></li>
-      </ul>
-      <br>
-
-      <h3>
         <%= t(:thinghttp) %>
         <div class="helplink">(<a href="/docs/thinghttp/"><%= t(:help_options) %></a>)</div>
       </h3>
@@ -83,13 +56,6 @@
         <li><a href="http://community.thingspeak.com/tutorials/prowl/send-push-updates-using-prowl-and-thinghttp/">Prowl Tutorial</a></li>
       </ul>
       <br>
-
-      <h3>
-        <%= t(:tweetcontrol) %>
-         <div class="helplink">(<a href="/docs/tweetcontrol"><%= t(:help_options) %></a>)</div>
-      </h3>
-      <%= t(:help_apps_tweetcontrol) %>
-      <br><br>
 
       <h3>
         <%= t(:react) %>

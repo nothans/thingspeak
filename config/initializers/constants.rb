@@ -20,10 +20,6 @@ HTTP_HEADER_API_KEY_NAME = 'THINGSPEAKAPIKEY'
 # whether to use Redis or not
 REDIS_ENABLED = false
 
-# Twitter api credentials
-CONSUMER_KEY = ''
-CONSUMER_SECRET = ''
-
 # reset password base url
 RESET_PASSWORD_URL = 'http://127.0.0.1:3000//users/reset_password/'
 

@@ -22,7 +22,6 @@ class DocsController < ApplicationController
   end
 
   def errors; ; end
-  def tweetcontrol; ; end
   def timecontrol; ; end
   def plugins; ; end
   def importer; ; end
@@ -49,16 +48,6 @@ class DocsController < ApplicationController
     # if user is signed in
     if current_user && current_user.thinghttps.any?
       @thinghttp_api_key = current_user.thinghttps.order('updated_at desc').first.api_key
-    end
-  end
-
-  def thingtweet
-    # default values
-    @thingtweet_api_key = 'XXXXXXXXXXXXXXXX'
-
-    # if user is signed in
-    if current_user && current_user.twitter_accounts.any?
-      @thingtweet_api_key = current_user.twitter_accounts.order('updated_at desc').first.api_key
     end
   end
 
