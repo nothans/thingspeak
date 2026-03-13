@@ -2,7 +2,7 @@ class MailerController < ApplicationController
 
   def resetpassword
     # protect against bots
-    render :text => '' and return if params[:userlogin].length > 0
+    render plain: '' and return if params[:userlogin].length > 0
 
     @user = User.find_by_login_or_email(params[:user][:login])
     if @user.nil?

@@ -1,8 +1,8 @@
 class PluginsController < ApplicationController
-  before_filter :authenticate_via_api_key!, :only => [:index]
-  before_filter :require_user, :except => [:show_public, :show, :public]
-  before_filter :set_plugins_menu
-  before_filter :check_permission, :only => ['edit', 'update', 'ajax_update', 'destroy']
+  before_action :authenticate_via_api_key!, :only => [:index]
+  before_action :require_user, :except => [:show_public, :show, :public]
+  before_action :set_plugins_menu
+  before_action :check_permission, :only => ['edit', 'update', 'ajax_update', 'destroy']
 
   def check_permission
     @plugin = Plugin.find(params[:id])

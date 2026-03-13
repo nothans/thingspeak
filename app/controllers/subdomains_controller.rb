@@ -2,7 +2,7 @@ class SubdomainsController < ApplicationController
 
   # show a blank page if subdomain
   def index
-    render :text => ''
+    render plain: ''
   end
 
   # output the file crossdomain.xml.erb

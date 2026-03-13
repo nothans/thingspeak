@@ -61,7 +61,7 @@ class FeedController < ApplicationController
     end
 
     # output proper http response if error
-    render :text => '-1', :status => 400 and return if !@success
+    render plain: '-1', status: 400 and return if !@success
 
     # output data in proper format
     respond_to do |format|
@@ -147,7 +147,7 @@ class FeedController < ApplicationController
       format.json { render :json => output, :callback => params[:callback] }
       format.xml { render :xml => output }
       format.csv
-      format.text { render :text => output }
+      format.text { render plain: output }
     end
   end
 
@@ -222,11 +222,11 @@ class FeedController < ApplicationController
 
     # output data in proper format
     respond_to do |format|
-      format.html { render :text => output }
+      format.html { render plain: output }
       format.json { render :json => output, :callback => params[:callback] }
       format.xml { render :xml => output }
       format.csv
-      format.text { render :text => output }
+      format.text { render plain: output }
     end
   end
 

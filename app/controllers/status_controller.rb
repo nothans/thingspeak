@@ -15,7 +15,7 @@ class StatusController < ApplicationController
     else
       respond_to do |format|
         format.json { render :json => 'Status are not public' }
-        format.html { render :text => 'Sorry the statuses are not public' }
+        format.html { render plain: 'Sorry the statuses are not public' }
       end
     end
 
@@ -127,7 +127,7 @@ class StatusController < ApplicationController
       format.xml { render :xml => output }
       format.csv { render :action => 'feed/show' }
 
-      format.text { render :text => output }
+      format.text { render plain: output }
     end
   end
 

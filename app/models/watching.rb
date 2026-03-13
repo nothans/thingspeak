@@ -9,14 +9,14 @@
 #  updated_at :datetime
 #
 
-class Watching < ActiveRecord::Base
+class Watching < ApplicationRecord
   belongs_to :user
   belongs_to :channel
 
   # check if the channel is being watched by this user
   def self.check(user_id, channel_id)
-    @watching = Watching.find_by_user_id_and_channel_id(user_id, channel_id)
-    return @watching.nil? ? false : true
+    @watching = Watching.find_by(user_id: user_id, channel_id: channel_id)
+    !@watching.nil?
   end
 
 end

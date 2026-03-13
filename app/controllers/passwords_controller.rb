@@ -1,5 +1,5 @@
 class SessionsController < Devise::SessionsController
-  before_filter :fix_params, :only => :create
+  before_action :fix_params, :only => :create
 
   # don't modify default devise controllers
   def create; super; end

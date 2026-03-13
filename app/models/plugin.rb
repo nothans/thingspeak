@@ -13,7 +13,7 @@
 #  public_flag :boolean          default(FALSE)
 #
 
-class Plugin < ActiveRecord::Base
+class Plugin < ApplicationRecord
   belongs_to :user
   has_many :windows, -> { where window_type: 'plugin' }, :foreign_key => :content_id, :source => :window
   before_destroy { |record| record.windows.each { |window| window.delete } }

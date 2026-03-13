@@ -5,7 +5,7 @@ class TagsController < ApplicationController
     
     channel = Channel.find(params[:channel_id])
     if current_user && channel.nil?
-      tag = Tag.find_by_name(params[:id], :include => :channels, :conditions => ['channels.public_flag = true OR channels.user_id = ?', current_user.id])
+      tag = Tag.includes(:channels).where('channels.public_flag = true OR channels.user_id = ?', current_user.id).references(:channels).find_by(name: params[:id])
     else
       channels = []
       channel.tags.each do |tag|
@@ -25,10 +25,10 @@ class TagsController < ApplicationController
   def show
     # if user is logged in, search their channels also
     if current_user
-      tag = Tag.find_by_name(params[:id], :include => :channels, :conditions => ['channels.public_flag = true OR channels.user_id = ?', current_user.id])
+      tag = Tag.includes(:channels).where('channels.public_flag = true OR channels.user_id = ?', current_user.id).references(:channels).find_by(name: params[:id])
       # else only search public channels
     else
-      tag = Tag.find_by_name(params[:id], :include => :channels, :conditions => ['channels.public_flag = true'])
+      tag = Tag.includes(:channels).where('channels.public_flag = true').references(:channels).find_by(name: params[:id])
     end
 
     @results = tag.channels if tag

@@ -10,5 +10,5 @@
 #  updated_at :datetime
 #
 
-class Failedlogin < ActiveRecord::Base
+class Failedlogin < ApplicationRecord
 end

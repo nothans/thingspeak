@@ -12,7 +12,7 @@
 #  cache      :integer
 #
 
-class Pipe < ActiveRecord::Base
+class Pipe < ApplicationRecord
 
   # pagination variables
   cattr_reader :per_page

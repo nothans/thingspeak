@@ -8,6 +8,7 @@ development:
   password: "speak"
   host: db
   port: 3306
+  ssl_mode: disabled
 
 test:
   adapter: mysql2
@@ -19,6 +20,7 @@ test:
   password: "speak"
   host: db
   port: 3306
+  ssl_mode: disabled
 
 production:
   adapter: mysql2
@@ -30,3 +32,4 @@ production:
   password: "speak"
   host: db
   port: 3306
+  ssl_mode: disabled

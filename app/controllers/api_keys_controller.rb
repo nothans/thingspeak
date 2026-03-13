@@ -1,7 +1,7 @@
 class ApiKeysController < ApplicationController
   include KeyUtilities, ApiKeys
 
-  before_filter :require_user, :set_channels_menu
+  before_action :require_user, :set_channels_menu
 
   def index
     api_index params[:channel_id]
@@ -10,7 +10,7 @@ class ApiKeysController < ApplicationController
 
   def destroy
     current_user.api_keys.find_by_api_key(params[:id].to_s).try(:destroy)
-    redirect_to :back
+    redirect_back(fallback_location: root_path)
   end
 
   def create
@@ -36,8 +36,8 @@ class ApiKeysController < ApplicationController
 
   def update
     @api_key = current_user.api_keys.find_by_api_key(params[:id].to_s)
-    @api_key.update_attributes(api_key_params)
-    redirect_to :back
+    @api_key.update(api_key_params)
+    redirect_back(fallback_location: root_path)
   end
 
   private

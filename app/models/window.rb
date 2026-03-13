@@ -20,7 +20,7 @@
 
 # content_id refers to plugin_id, field_number, etc depending on the window type
 # valid values for window_type: status, location, chart, plugin, video
-class Window < ActiveRecord::Base
+class Window < ApplicationRecord
   belongs_to :channel
 
   self.include_root_in_json = true

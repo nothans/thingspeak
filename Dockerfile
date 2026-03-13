@@ -1,17 +1,10 @@
-FROM ruby:2.1
-
-# Fix archived Debian repos (Jessie is EOL)
-RUN sed -i 's/httpredir\.debian\.org/archive.debian.org/g' /etc/apt/sources.list && \
-    sed -i 's/deb\.debian\.org/archive.debian.org/g' /etc/apt/sources.list && \
-    sed -i 's|security\.debian\.org|archive.debian.org/debian-security|g' /etc/apt/sources.list && \
-    sed -i '/jessie-updates/d' /etc/apt/sources.list && \
-    echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until
+FROM ruby:3.4
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y --force-yes \
+RUN apt-get update && apt-get install -y \
     build-essential \
-    libmysqlclient-dev \
-    mysql-client \
+    default-libmysqlclient-dev \
+    default-mysql-client \
     nodejs \
     git \
     ca-certificates \
@@ -30,7 +23,10 @@ COPY . .
 # Copy Docker-specific database config
 COPY config/database.yml.docker config/database.yml
 
-# Copy and set up entrypoint (sed fixes Windows CRLF line endings)
+# Fix Windows CRLF line endings in scripts
+RUN find /app/bin -type f -exec sed -i 's/\r$//' {} + 2>/dev/null || true
+
+# Copy and set up entrypoint
 COPY docker-entrypoint.sh /usr/bin/
 RUN sed -i 's/\r$//' /usr/bin/docker-entrypoint.sh && chmod +x /usr/bin/docker-entrypoint.sh
 

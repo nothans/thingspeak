@@ -1,8 +1,8 @@
 class ChannelsController < ApplicationController
   include ChannelsHelper, ApiKeys
-  before_filter :authenticate_via_api_key!, :only => [:index]
-  before_filter :require_user, :except => [:realtime, :realtime_update, :show, :post_data, :social_show, :social_feed, :public]
-  before_filter :set_channels_menu
+  before_action :authenticate_via_api_key!, :only => [:index]
+  before_action :require_user, :except => [:realtime, :realtime_update, :show, :post_data, :social_show, :social_feed, :public]
+  before_action :set_channels_menu
   layout 'application', :except => [:social_show, :social_feed]
   protect_from_forgery :except => [:realtime, :realtime_update, :post_data, :create, :destroy, :clear]
   require 'csv'
@@ -23,7 +23,7 @@ class ChannelsController < ApplicationController
 
   # user watches a channel
   def watch
-    @watching = Watching.find_by_user_id_and_channel_id(current_user.id, params[:id])
+    @watching = Watching.find_by(user_id: current_user.id, channel_id: params[:id])
 
     # add watching
     if params[:flag] == 'true'
@@ -34,7 +34,7 @@ class ChannelsController < ApplicationController
       @watching.delete if !@watching.nil?
     end
 
-    render :text => '1'
+    render plain: '1'
   end
 
   # list public channels
@@ -232,7 +232,7 @@ class ChannelsController < ApplicationController
 
     # make updating attributes easier
     params[:channel] = params
-    channel.update_attributes(channel_params)
+    channel.update(channel_params)
 
     channel.set_windows(true)
     channel.save
@@ -296,7 +296,7 @@ class ChannelsController < ApplicationController
     channel.save
     feed.save
 
-    render :nothing => true
+    head :ok
   end
 
   # response is '0' if failure, 'entry_id' if success
@@ -318,10 +318,10 @@ class ChannelsController < ApplicationController
       talkback_key = params[:talkback_key] || false;
 
       # rate limit posts if channel is not social and timespan is smaller than the allowed window
-      render :text => '0' and return if (RATE_LIMIT && !tstream && !talkback_key && !channel.social && channel.last_write_at.present? && Time.now < (channel.last_write_at + RATE_LIMIT_FREQUENCY.to_i.seconds))
+      render plain: '0' and return if (RATE_LIMIT && !tstream && !talkback_key && !channel.social && channel.last_write_at.present? && Time.now < (channel.last_write_at + RATE_LIMIT_FREQUENCY.to_i.seconds))
 
       # if social channel, latitude MUST be present
-      render :text => '0' and return if (channel.social && params[:latitude].blank?)
+      render plain: '0' and return if (channel.social && params[:latitude].blank?)
 
       # update entry_id for channel and feed
       entry_id = channel.next_entry_id
@@ -392,12 +392,12 @@ class ChannelsController < ApplicationController
     end
 
     # output response code
-    render(:text => '0', :status => 400) and return if status == '0'
+    render(plain: '0', status: 400) and return if status == '0'
 
     # if there is a talkback_key and a command that was executed
     if params[:talkback_key].present? && command.present?
         respond_to do |format|
-          format.html { render :text => command.command_string }
+          format.html { render plain: command.command_string }
           format.json { render :json => command.to_json }
           format.xml { render :xml => command.to_xml(Command.public_options) }
         end and return
@@ -408,10 +408,10 @@ class ChannelsController < ApplicationController
 
     # normal route, respond with the feed
     respond_to do |format|
-      format.html { render :text => status }
+      format.html { render plain: status }
       format.json { render :json => feed.to_json }
       format.xml { render :xml => feed.to_xml(Feed.public_options) }
-      format.any { render :text => status }
+      format.any { render plain: status }
     end and return
   end
 

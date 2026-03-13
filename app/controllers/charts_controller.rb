@@ -1,5 +1,5 @@
 class ChartsController < ApplicationController
-  before_filter :require_user, :only => [:edit]
+  before_action :require_user, :only => [:edit]
 
   def edit
     # params[:id] is the windows ID

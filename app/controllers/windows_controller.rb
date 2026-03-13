@@ -1,14 +1,14 @@
 class WindowsController < ApplicationController
-  before_filter :require_user, :except => [:index, :html, :iframe]
+  before_action :require_user, :except => [:index, :html, :iframe]
 
   # hides a window, returns the window id if successful or '-1' if failure
   def hide
     window = Window.find(params[:id])
     window.show_flag = false
     if window.save
-      render :text => window.id.to_s
+      render plain: window.id.to_s
     else
-      render :text => '-1'
+      render plain: '-1'
     end
   end
 
@@ -34,7 +34,7 @@ class WindowsController < ApplicationController
   def html
     window = Window.find(params[:id])
     window.set_html_for_display!
-    render :text => window.html
+    render plain: window.html
   end
 
   def iframe
@@ -43,7 +43,7 @@ class WindowsController < ApplicationController
     iframe_html = window.html
     # set the domain correctly
     iframe_html = iframe_html.gsub(/src=\"[\/.]/, 'src="' + api_domain);
-    render :text => iframe_html
+    render plain: iframe_html
   end
 
   def index
@@ -144,9 +144,9 @@ class WindowsController < ApplicationController
     end
     # if the windows were saved successfully
     if saved
-      render :text => '0'
+      render plain: '0'
     else
-      render :text => '-1'
+      render plain: '-1'
     end
 
   end

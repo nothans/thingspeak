@@ -1,5 +1,5 @@
 class DocsController < ApplicationController
-  before_filter :set_support_menu
+  before_action :set_support_menu
 
   def index
     @timezones = {}

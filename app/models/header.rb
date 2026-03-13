@@ -10,7 +10,7 @@
 #  thinghttp_id :integer
 #
 
-class Header < ActiveRecord::Base
+class Header < ApplicationRecord
   belongs_to :thinghttp
 end
 

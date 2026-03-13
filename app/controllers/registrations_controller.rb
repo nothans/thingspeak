@@ -1,6 +1,6 @@
 class RegistrationsController < Devise::RegistrationsController
   include KeyUtilities
-  after_filter :add_api_key, :only => :create
+  after_action :add_api_key, :only => :create
 
   # use defaults from devise
   def new; super; end

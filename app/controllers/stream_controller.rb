@@ -7,7 +7,7 @@ class StreamController < ApplicationController
     api_key = ApiKey.find_by_api_key(get_apikey)
 
     # output proper http response if error
-    render :text => '-1', :status => 400 and return if !channel_permission?(channel, api_key)
+    render plain: '-1', status: 400 and return if !channel_permission?(channel, api_key)
 
     # set the attachment headers
     response.headers['Content-Type'] = 'text/csv'

@@ -12,7 +12,7 @@
 #  note       :string(255)
 #
 
-class ApiKey < ActiveRecord::Base
+class ApiKey < ApplicationRecord
   belongs_to :channel
   belongs_to :user
 

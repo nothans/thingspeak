@@ -22,7 +22,7 @@
 #  location   :string(255)
 #
 
-class Feed < ActiveRecord::Base
+class Feed < ApplicationRecord
   extend FeedHelper
   belongs_to :channel
 

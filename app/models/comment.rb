@@ -13,7 +13,7 @@
 #  channel_id :integer
 #
 
-class Comment < ActiveRecord::Base
+class Comment < ApplicationRecord
   belongs_to :channel
   belongs_to :user
   acts_as_tree :order => 'created_at'

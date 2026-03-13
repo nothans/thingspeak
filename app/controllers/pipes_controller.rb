@@ -1,5 +1,5 @@
 class PipesController < ApplicationController
-  before_filter :require_admin
+  before_action :require_admin
 
   def index
     @pipes =  Pipe.paginate :page => params[:page], :order => 'created_at DESC'

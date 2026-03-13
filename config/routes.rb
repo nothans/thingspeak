@@ -1,11 +1,5 @@
 Thingspeak::Application.routes.draw do
 
-  # admin routes (activeadmin disabled)
-  if defined?(ActiveAdmin)
-    devise_for :admin_users, ActiveAdmin::Devise.config
-    ActiveAdmin.routes(self)
-  end
-
   # main data posts using this route
   match 'update', :to => 'channels#post_data', :via => ((GET_SUPPORT) ? [:get, :post] : :post)
   match 's/update', :to => 'channels#post_data', :via => [:get, :post]
@@ -46,7 +40,7 @@ Thingspeak::Application.routes.draw do
   get 'users/:glob' => 'users#profile', :as => 'user_profile', :constraints => { :glob => /.*/ }
 
   resource :user_session
-  resource 'account', :to => 'users'
+  resource 'account', controller: 'users'
   resources :users
 
   # social channels
@@ -95,10 +89,10 @@ Thingspeak::Application.routes.draw do
     end
     resources :feed
 
-    resources :feeds, :to => 'feed'
+    resources :feeds, controller: 'feed'
     resources :api_keys, :except => [:show, :edit]
     resources :status
-    resources :statuses, :to => 'status'
+    resources :statuses, controller: 'status'
     resources :charts
     resources :maps
     resources :channels
@@ -184,7 +178,17 @@ Thingspeak::Application.routes.draw do
   get 'apps/react', :to => 'react#index'
 
   # docs
-  get 'docs(/:action)', :to => 'docs'
+  get 'docs' => 'docs#index'
+  get 'docs/errors' => 'docs#errors'
+  get 'docs/timecontrol' => 'docs#timecontrol'
+  get 'docs/plugins' => 'docs#plugins'
+  get 'docs/importer' => 'docs#importer'
+  get 'docs/charts' => 'docs#charts'
+  get 'docs/users' => 'docs#users'
+  get 'docs/tutorials' => 'docs#tutorials'
+  get 'docs/channels' => 'docs#channels'
+  get 'docs/thinghttp' => 'docs#thinghttp'
+  get 'docs/talkback' => 'docs#talkback'
 
   # users
   devise_scope :user do

@@ -51,7 +51,7 @@
 #  last_write_at             :datetime
 #
 
-class Channel < ActiveRecord::Base
+class Channel < ApplicationRecord
   include KeyUtilities
   # geolocation search: Channel.within(miles, :origin => [latitude, longitude]).to_a
   # example: channels = Channel.within(4000, :origin => [4, 6]).to_a
@@ -84,7 +84,7 @@ class Channel < ActiveRecord::Base
   scope :is_public, lambda { where("public_flag = true") }
   scope :active, lambda { where("channels.last_entry_id > 1 and channels.updated_at > ?", DateTime.now.utc - 7.day) }
   scope :being_cleared, lambda { where("clearing = true") }
-  scope :by_array, lambda {|ids| { :conditions => ["id in (?)", ids.uniq] }  }
+  scope :by_array, ->(ids) { where(id: ids.uniq) }
   scope :with_tag, lambda {|name| joins(:tags).where("tags.name = ?", name) }
 
   # pagination variables

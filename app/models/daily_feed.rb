@@ -10,7 +10,7 @@
 #  field       :integer
 #
 
-class DailyFeed < ActiveRecord::Base
+class DailyFeed < ApplicationRecord
   belongs_to :channel
 
   self.include_root_in_json = false
@@ -22,7 +22,7 @@ class DailyFeed < ActiveRecord::Base
     # if there is an existing daily feed
     if daily_feed.present?
       # update it
-      daily_feed.update_attributes(attributes)
+      daily_feed.update(attributes)
     # else create it
     else
       daily_feed = DailyFeed.create(attributes)

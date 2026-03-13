@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   include KeyUtilities
-  skip_before_filter :verify_authenticity_token, :only => [:api_login]
-  before_filter :require_user, :only => [:show, :edit, :update, :edit_profile]
+  skip_before_action :verify_authenticity_token, :only => [:api_login]
+  before_action :require_user, :only => [:show, :edit, :update, :edit_profile]
 
   # delete account
   def destroy
@@ -29,7 +29,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.json { render :json => user.as_json(User.private_options_plus(:authentication_token)) }
       format.xml { render :xml => user.to_xml(User.private_options_plus(:authentication_token)) }
-      format.any { render :text => user.authentication_token }
+      format.any { render plain: user.authentication_token }
     end
   end
 
@@ -48,7 +48,7 @@ class UsersController < ApplicationController
   def update_profile
     @user = current_user # makes our views "cleaner" and more consistent
     # update
-    @user.update_attributes(user_params)
+    @user.update(user_params)
     redirect_to account_path
   end
 
@@ -60,7 +60,7 @@ class UsersController < ApplicationController
     @user = User.find_by_login(params[:id])
 
     # output error if user not found
-    render :text => t(:user_not_found) and return if @user.nil?
+    render plain: t(:user_not_found) and return if @user.nil?
 
     # set page title
     @title = @user.login || nil
@@ -90,7 +90,7 @@ class UsersController < ApplicationController
     @user = User.find_by_login(params[:id])
 
     # output error if user not found
-    render :text => t(:user_not_found) and return if @user.nil?
+    render plain: t(:user_not_found) and return if @user.nil?
 
     # if html request
     if request.format == :html
@@ -131,7 +131,7 @@ class UsersController < ApplicationController
     params[:user].delete(:password) if params[:user][:password].blank?
 
     # check current password and update
-    if @user.valid_password?(params[:user][:password_current]) && @user.update_attributes(user_params)
+    if @user.valid_password?(params[:user][:password_current]) && @user.update(user_params)
       # sign the user back in, since devise will log the user out on update
       sign_in(current_user, :bypass => true)
       flash[:notice] = t('devise.registrations.updated')

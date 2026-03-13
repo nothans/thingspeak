@@ -1,19 +1,19 @@
 class ApplicationController < ActionController::Base
-  skip_before_filter :verify_authenticity_token
   # include all helpers for controllers
   helper :all
   # include these helper methods for views
   helper_method :current_user_session, :current_user, :logged_in?, :get_header_value, :to_bytes
-  protect_from_forgery
-  before_filter :allow_cross_domain_access, :set_variables, :set_time_zone
-  before_filter :configure_permitted_parameters, if: :devise_controller?
-  after_filter :remove_headers
-  before_filter :authenticate_user_from_token!
+  protect_from_forgery with: :null_session
+  skip_before_action :verify_authenticity_token
+  before_action :allow_cross_domain_access, :set_variables, :set_time_zone
+  before_action :configure_permitted_parameters, if: :devise_controller?
+  after_action :remove_headers
+  before_action :authenticate_user_from_token!
 
   # responds with blank
   def respond_with_blank
     respond_to do |format|
-      format.html { render :text => '' }
+      format.html { render plain: '' }
       format.json { render :json => {}.to_json }
       # fix xml response line breaks
       format.xml { render :xml => {}.to_xml.gsub("\n", '').gsub("<hash>", "\n<hash>") }
@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   def respond_with_error(error_code)
     error_response = ErrorResponse.new(error_code)
     respond_to do |format|
-      format.html { render :text => error_response.error_code, :status => error_response.http_status }
+      format.html { render plain: error_response.error_code, status: error_response.http_status }
       format.json { render :json => error_response.to_json, :status => error_response.http_status }
       format.xml { render :xml => error_response.to_xml, :status => error_response.http_status }
     end
@@ -83,9 +83,9 @@ class ApplicationController < ActionController::Base
   protected
 
     def configure_permitted_parameters
-      devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:login, :email, :password, :password_confirmation, :remember_me, :time_zone) }
-      devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:login, :email, :password, :remember_me) }
-      devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:login, :email, :password, :password_confirmation, :time_zone, :password_current) }
+      devise_parameter_sanitizer.permit(:sign_up, keys: [:login, :email, :password, :password_confirmation, :remember_me, :time_zone])
+      devise_parameter_sanitizer.permit(:sign_in, keys: [:login, :email, :password, :remember_me])
+      devise_parameter_sanitizer.permit(:account_update, keys: [:login, :email, :password, :password_confirmation, :time_zone, :password_current])
     end
 
   private
@@ -167,7 +167,7 @@ class ApplicationController < ActionController::Base
 
     def require_admin
       unless current_admin_user.present?
-        render :nothing => true, :status => 403 and return
+        head :forbidden and return
         false
       end
     end
@@ -267,7 +267,7 @@ class ApplicationController < ActionController::Base
     end
 
     def check_permissions(channel)
-      render :text => t(:channel_permission) and return if (current_user.nil? || (channel.user_id != current_user.id))
+      render plain: t(:channel_permission) and return if (current_user.nil? || (channel.user_id != current_user.id))
     end
 
     # checks permission for channel using api_key

@@ -4,14 +4,15 @@
   <meta name="description" content="<%= "#{@title} on ThingSpeak: " if @title.present? %>Open source data platform and API for the Internet of Things.">
   <meta name="keywords" content="iot, internet of things, iot platform, github, open source, internet of things platform, iobridge">
 
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/cerulean/bootstrap.min.css" />
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" media="screen" rel="stylesheet" />
-  <%= stylesheet_link_tag 'application', "data-turbolinks-track" => true %>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootswatch@3.4.1/cerulean/bootstrap.min.css" />
+  <link href="//cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" media="screen" rel="stylesheet" />
+  <%= stylesheet_link_tag 'application' %>
 
-  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script type='text/javascript' src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
-  <%= javascript_include_tag 'application', "data-turbolinks-track" => true %>
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.4.1/jquery-migrate.min.js"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.13.3/jquery-ui.min.js"></script>
+  <%= javascript_include_tag 'application' %>
 
   <%= csrf_meta_tag %>
   <% if Rails.env == 'production' %>
@@ -20,4 +21,3 @@
 
   <%= yield :head %>
 </head>
-

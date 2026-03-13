@@ -30,7 +30,7 @@
 # user.api_keys is a collection of channel api_keys (read and write)
 # user.api_key is a single api_key that allows control of a user's account
 ####################
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   include KeyUtilities
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
   has_many :channels, :dependent => :destroy
