@@ -2,8 +2,8 @@
 <html style="height: 100%;">
   <head>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="//thingspeak.com/highcharts-3.0.8.js"></script>
-    <script type="text/javascript" src="//thingspeak.com/exporting.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/highcharts@11.4.8/highcharts.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/highcharts@11.4.8/modules/exporting.js"></script>
 
     <%= javascript_include_tag 'application' %>
 
@@ -18,7 +18,7 @@
           return Date.parse(d) - (myOffset * 60000);
         }
 
-        $(document).on('page:load ready', function() {
+        $(function() {
           // blank array for holding chart data
           var chartData = [];
           // variable for the local date in milliseconds
@@ -27,14 +27,14 @@
           var last_date;
 
           // get the data with a webservice call
-          $.getJSON('<%= "#{@domain}channels/#{params[:channel_id]}/field/#{params[:id]}.json?callback=?&offset=0#{@qs}" %>', function(data) {
+          $.getJSON('<%= raw("#{@domain}channels/#{params[:channel_id]}/field/#{params[:id]}.json?callback=?&offset=0#{@qs}") %>', function(data) {
 
             // if no access
             if (data == '-1') { $('#chart-container').append('<%= t(:chart_no_access) %>'); }
 
             // iterate through each feed
             $.each(data.feeds, function() {
-               var p = new Highcharts.Point();
+               var p = {};
                // set the proper values
                var v = this.field<%= params[:id] %>;
                p.x = getChartDate(this.created_at);
@@ -56,13 +56,13 @@
                     //if dynamic and no "timeslice" options are set
                     //   GAK 02/16/2013 Let's try to add the last "average" slice if params[:average]
 
-                    var url = '<%= "#{@domain}channels/#{params[:channel_id]}/feed/last.json?callback=?&offset=0&location=true#{@qs}" %>' ;
+                    var url = '<%= raw("#{@domain}channels/#{params[:channel_id]}/feed/last.json?callback=?&offset=0&location=true#{@qs}") %>' ;
                     if ("<%= params[:average] %>".length > 0) {
-                      url = '<%= "#{@domain}channels/#{params[:channel_id]}/feed/last_average.json?callback=?&offset=0&location=true&average=#{params[:average]}#{@qs}" %>' ;
+                      url = '<%= raw("#{@domain}channels/#{params[:channel_id]}/feed/last_average.json?callback=?&offset=0&location=true&average=#{params[:average]}#{@qs}") %>' ;
                     } else if ("<%= params[:median] %>".length > 0) {
-                      url = '<%= "#{@domain}channels/#{params[:channel_id]}/feed/last_median.json?callback=?&offset=0&location=true&median=#{params[:median]}#{@qs}" %>' ;
+                      url = '<%= raw("#{@domain}channels/#{params[:channel_id]}/feed/last_median.json?callback=?&offset=0&location=true&median=#{params[:median]}#{@qs}") %>' ;
                     } else if ("<%= params[:sum] %>".length > 0) {
-                      url = '<%= "#{@domain}channels/#{params[:channel_id]}/feed/last_sum.json?callback=?&offset=0&location=true&sum=#{params[:sum]}#{@qs}" %>' ;
+                      url = '<%= raw("#{@domain}channels/#{params[:channel_id]}/feed/last_sum.json?callback=?&offset=0&location=true&sum=#{params[:sum]}#{@qs}") %>' ;
                     }
 
                     if ('true' === '<%= params[:dynamic] %>' && ('<%= params[:timescale] %>'.length < 1)) {
@@ -73,7 +73,7 @@
                           // if data exists
                           if (data && data.field<%= params[:id] %>) {
 
-                            var p = new Highcharts.Point();
+                            var p = {};
                             // set the proper values
                             var v = data.field<%= params[:id] %>;
 
@@ -186,7 +186,7 @@
         // end getJSON success
         })
         // chained to getjson, on error
-        .error(function() {
+        .fail(function() {
           $('#chart-container').html('Invalid Channel.');
         });
 

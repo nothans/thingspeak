@@ -8,6 +8,14 @@ until ruby -e "require 'socket'; TCPSocket.new('${DATABASE_HOST:-db}', 3306).clo
 done
 echo "MySQL is ready!"
 
+# Copy Docker database config if needed (volume mount overrides build-time copy)
+if [ ! -f /app/config/database.yml ] || ! grep -q "host: db" /app/config/database.yml 2>/dev/null; then
+  cp /app/config/database.yml.docker /app/config/database.yml
+fi
+
+# Install gems (handles volume-mounted Gemfile changes)
+bundle install --quiet
+
 # Remove stale PID file
 rm -f /app/tmp/pids/server.pid
 

@@ -14,11 +14,10 @@ code                    { word-wrap: break-word; white-space: normal; }
 
 /* homepage */
 #home-motto             { font-size: 2em; }
-#home-motto h1          { font-size: 2em; color: #fff; }
-#home-top               { display: table; height: 500px; width: 100%; background: url('<%= asset_path("thingspeak_stars_bg.jpg") %>') no-repeat; background-size: 100% 500px; text-align: center; color: #fff; }
+#home-motto h1          { font-size: 2em; color: #fff; margin-top: 0; }
+#home-top               { display: table; height: 340px; width: 100%; background: linear-gradient(135deg, #1a3a5c 0%, #2FA4E7 50%, #1a8fd1 100%); text-align: center; color: #fff; }
 #home-top a             { color: #fff; }
-#home-top-center        { display: table-cell; vertical-align: middle; position: relative; top: -20px; }
-.panel-home             { min-height: 180px; }
+#home-top-center        { display: table-cell; vertical-align: middle; }
 
 /* misc */
 body                    { padding-top: 70px; }
@@ -31,10 +30,7 @@ body                    { padding-top: 70px; }
 .link-no-hover:hover    { text-decoration: none; }
 .timecontrol-time       { width: 65px; margin-right: 20px; text-align: right; display: inline-block; }
 
-/* contact form */
-#contact_form           { display: none; }
-#contact_link           { cursor: pointer; }
-#contact_link:hover     { text-decoration: none; }
+/* contact form (removed) */
 
 /* multiline forms */
 .form-horizontal .multiline-label { margin-top: -10px; }
@@ -65,28 +61,27 @@ body                    { padding-top: 70px; }
 /* Sticky footer styles
 -------------------------------------------------- */
 
-html,
+html { height: 100%; }
 body {
-  height: 100%;
-  /* The html and body elements cannot have any padding or margin. */
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
 }
 
 /* Wrapper for page content to push down footer */
 #wrap {
-  min-height: 100%;
-  height: auto;
-  /* Negative indent footer by its height */
-  margin: 0 auto -30px;
-  padding: 0 0 60px;
+  flex: 1 0 auto;
 }
 
-/* Set the fixed height of the footer here */
+/* Footer pinned to bottom */
 #footer {
-  padding-top: 5px;
+  flex-shrink: 0;
+  padding: 10px 0;
   border-top: 1px solid #ddd;
-  height: 30px;
   background-color: #f5f5f5;
 }
+#footer p { margin: 0; }
 #footer .container { background-color: #f5f5f5; }
 @media (max-width: 767px) {
   #footer span { display: block; text-align: center; float: none !important; }
@@ -313,9 +308,13 @@ input.video_narrow {width:100px; }
 
 /* jQuery Overrides */
 .ui-widget { font-size: 0.9em; }
-.ui-widget-header   {
-    border: 1px solid #0867A3;
-    background: #0867a3 none top right no-repeat;
+.portlet-header.ui-widget-header {
+    border: 1px solid #2fa4e7;
+    background: #2fa4e7 none top right no-repeat;
+    color: #fff;
+}
+.portlet-header .ui-icon {
+    filter: brightness(0) invert(1);
 }
 .ui-progressbar {
     height: 5px;
@@ -403,32 +402,6 @@ input.video_narrow {width:100px; }
     background-color:#aaa;
 
 }
-
-.addpluginlink {
-    color:white;
-    padding:7px;
-    margin-left:10px;
-    border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    background-color:#aaa;
-    cursor:pointer;
-}
-.addpluginlink:hover {
-    background-color: #ccc;
-}
-
-.pluginrectangle {
-    display:none;
-    background-color:#aaa;
-    border-radius:5px;
-    position:absolute;
-    height:70%;
-    width:100%;
-    top:30px;
-    right:0;
-}
-
 
 .developerlink:hover {
     background-color: #ccc;

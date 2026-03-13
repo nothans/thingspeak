@@ -1,4 +1,4 @@
-$(document).on('page:load ready', function() {
+$(function() {
 
   // when a response is clicked
   $('.response').click(function() {

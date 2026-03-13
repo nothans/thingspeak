@@ -1,5 +1,5 @@
 // when the document is ready
-$(document).on('page:load ready', function() {
+$(function() {
 
   // allow flash notices to be dismissed
   if ($(".flash").length > 0) {

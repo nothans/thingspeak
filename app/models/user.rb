@@ -38,7 +38,6 @@ class User < ApplicationRecord
   has_many :reacts, :dependent => :destroy
   has_many :talkbacks, :dependent => :destroy
   has_many :timecontrols, :dependent => :destroy
-  has_many :plugins, :dependent => :destroy
   has_many :devices, :dependent => :destroy
   has_many :api_keys, :dependent => :destroy
   has_many :watchings, :dependent => :destroy

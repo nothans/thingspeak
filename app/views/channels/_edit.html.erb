@@ -134,7 +134,7 @@
   // remember default field label
   var default_label = '<%= t(:channel_default_field) %>';
   // when document is ready
-  $(document).on('page:load ready', function() {
+  $(function() {
     // iterate through each field textbox
     $('.field').each(function() {
       // if a value is present, show the 'remove' checkbox

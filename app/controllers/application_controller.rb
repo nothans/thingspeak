@@ -135,7 +135,6 @@ class ApplicationController < ActionController::Base
     def set_support_menu; @menu = 'support'; end
     def set_channels_menu; @menu = 'channels'; end
     def set_apps_menu; @menu = 'apps'; end
-    def set_plugins_menu; @menu = 'plugins'; end
     def set_devices_menu; @menu = 'devices'; end
 
     def require_user

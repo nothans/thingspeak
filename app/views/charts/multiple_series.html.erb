@@ -2,8 +2,8 @@
 <html style="height: 100%;">
   <head>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="//thingspeak.com/highcharts-3.0.8.js"></script>
-    <script type="text/javascript" src="//thingspeak.com/exporting.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/highcharts@11.4.8/highcharts.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/highcharts@11.4.8/modules/exporting.js"></script>
 
     <script type="text/javascript">
       // variables for the first series
@@ -101,7 +101,7 @@
 
           // iterate through each feed
           $.each(data.feeds, function() {
-            var point = new Highcharts.Point();
+            var point = {};
             // set the proper values
             var value = this[field_name];
             point.x = getChartDate(this.created_at);

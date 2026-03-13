@@ -118,14 +118,6 @@ Thingspeak::Application.routes.draw do
     end
   end
 
-  resources :plugins do
-    collection do
-      get 'private_plugins'
-      get 'public_plugins'
-      #get 'public'
-    end
-  end
-
   resources :devices do
     member do
       post :add_mac_address
@@ -181,11 +173,9 @@ Thingspeak::Application.routes.draw do
   get 'docs' => 'docs#index'
   get 'docs/errors' => 'docs#errors'
   get 'docs/timecontrol' => 'docs#timecontrol'
-  get 'docs/plugins' => 'docs#plugins'
   get 'docs/importer' => 'docs#importer'
   get 'docs/charts' => 'docs#charts'
   get 'docs/users' => 'docs#users'
-  get 'docs/tutorials' => 'docs#tutorials'
   get 'docs/channels' => 'docs#channels'
   get 'docs/thinghttp' => 'docs#thinghttp'
   get 'docs/talkback' => 'docs#talkback'

@@ -24,6 +24,10 @@ services:
       DATABASE_HOST: db
       DATABASE_USER: thing
       DATABASE_PASSWORD: speak
+    volumes:
+      - .:/app
+      - bundle_cache:/usr/local/bundle
 
 volumes:
   mysql_data:
+  bundle_cache:

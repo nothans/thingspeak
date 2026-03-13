@@ -26,7 +26,7 @@
     $.restSetup = { methodParam: '_method' };
 
     // collects the csrf-param and csrf-token from meta tags
-    $(document).on('page:load ready', function(){
+    $(function(){
       $.extend($.restSetup, {
         csrfParam: $('meta[name=csrf-param]').attr('content'),
         csrfToken: $('meta[name=csrf-token]').attr('content')

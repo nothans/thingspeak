@@ -46,8 +46,8 @@ class StatusController < ApplicationController
         .order('created_at desc')
         .limit(limit)
 
-      # sort properly
-      @feeds.reverse!
+      # sort properly (oldest to newest)
+      @feeds = @feeds.to_a.reverse
 
       # set output correctly
       if request.format == 'xml'

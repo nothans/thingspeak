@@ -13,7 +13,7 @@
 <% end %>
 <div>
 <script>
-  $(document).on('page:load ready', function() {
+  $(function() {
     $(".timeago").timeago();
     var refreshInterval = setInterval(refreshStatus, 1 * 60 * 1000);
   });

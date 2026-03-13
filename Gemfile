@@ -24,6 +24,7 @@ gem 'daemons'
 gem 'rack-utf8_sanitizer'
 gem 'newrelic_rpm'
 gem 'actionpack-xml_parser'
+gem 'csv'
 gem 'chronic'
 gem 'geokit-rails'
 
@@ -36,6 +37,7 @@ group :development do
   gem 'annotate'
   gem 'puma', '~> 6.0'
   gem 'listen'
+  gem 'rails_live_reload'
 end
 
 group :test do

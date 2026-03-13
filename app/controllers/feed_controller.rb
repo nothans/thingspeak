@@ -102,7 +102,7 @@ class FeedController < ApplicationController
     # get the last (limit) feeds
     last_feeds = Feed.where(:channel_id => @channel.id).limit(limit).order('created_at desc')
     # put feeds in correct order (oldest to most recent)
-    last_feeds.reverse!
+    last_feeds = last_feeds.to_a.reverse
 
     # check if the correct param is present by getting the param name from arg, e.g.: 'median' from 'medians'
     correct_params_present = params[arg.chop.to_sym].present?
@@ -246,8 +246,8 @@ class FeedController < ApplicationController
     @count = feeds.count
     @time_after_db = Time.now
 
-    # sort properly
-    feeds.reverse!
+    # sort properly (oldest to newest)
+    feeds = feeds.to_a.reverse
 
     @time_after_sort = Time.now
 

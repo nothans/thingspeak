@@ -1,5 +1,5 @@
 // when the dom is ready
-$(document).on('page:load ready', function() {
+$(function() {
 
   // if the cheerlights row exists
   if ($('#cheerlights_row').length > 0) {

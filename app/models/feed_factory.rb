@@ -113,8 +113,8 @@ class FeedFactory < ApplicationController
       .limit(@limit)
       .load
 
-    # sort properly
-    @feeds.reverse!
+    # sort properly (oldest to newest)
+    @feeds = @feeds.to_a.reverse
 
     # calculate feeds
     @feeds = calculate_feeds(@feeds)

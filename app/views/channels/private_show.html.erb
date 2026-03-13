@@ -53,7 +53,7 @@
 	});
 
 
-$(document).on('page:load ready', function() {
+$(function() {
       $(".timeago").timeago();
       if(document.location.hash!='') {
 
@@ -87,10 +87,9 @@ $(document).on('page:load ready', function() {
 	  $("#watchText").text("Watch");
       }
       $("#maincontent_nowidth").tabs({
-			  select: function( e, ui) {
-				  $.cookie('stickyTab', ui.index );
-				},
 				activate: function( event, ui ) {
+				  var index = ui.newTab.index();
+				  $.cookie('stickyTab', index);
 				  reloadCharts();
 				}
 			});
@@ -102,7 +101,7 @@ $(document).on('page:load ready', function() {
       }
       if( ! isNaN( stickyTab )  )
       {
-          $("#maincontent_nowidth").tabs( 'select', stickyTab );
+          $("#maincontent_nowidth").tabs( 'option', 'active', parseInt(stickyTab) );
       }
 
       var current_user = "<%= @mychannel %>";
