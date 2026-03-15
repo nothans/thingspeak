@@ -8,23 +8,13 @@ require 'rspec/rails'
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 RSpec.configure do |config|
-  # == Mock Framework
-  #
-  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
-  # config.mock_with :rr
   config.mock_with :rspec
 
-  # Use color in STDOUT
-  config.color_enabled = true
-
   # add devise test helpers
-  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_paths = ["#{::Rails.root}/spec/fixtures"]
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -43,10 +33,6 @@ RSpec.configure do |config|
   end
 end
 
-def ppp(obj)
-  puts ERB::Util.html_escape(obj.pretty_inspect).gsub(" ", '&nbsp;'*2).gsub("\t", '&nbsp;'*4).gsub("\n", "<br />\n")
-end
-
 def without_timestamping_of(*klasses)
   if block_given?
     klasses.delete_if { |klass| !klass.record_timestamps }
@@ -58,4 +44,3 @@ def without_timestamping_of(*klasses)
     end
   end
 end
-

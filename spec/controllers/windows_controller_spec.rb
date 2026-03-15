@@ -2,51 +2,51 @@ require 'spec_helper'
 
 describe WindowsController do
   before :each do
-    @user = FactoryGirl.create(:user)
+    @user = FactoryBot.create(:user)
 
-    controller.stub(:current_user).and_return(@user)
-    controller.stub(:current_user_session).and_return(true)
+    allow(controller).to receive(:current_user).and_return(@user)
+    allow(controller).to receive(:current_user_session).and_return(true)
 
-    @channel = FactoryGirl.create(:channel, :user => @user)
+    @channel = FactoryBot.create(:channel, :user => @user)
 
-    @window = FactoryGirl.create(:window)
+    @window = FactoryBot.create(:window)
     @channel.windows << @window
 
   end
 
   describe "PUT 'hide' for window" do
     it "should update the show_flag on that window" do
-      put 'hide', :channel_id => @channel.id, :id => @window.id
-      response.should be_successful
+      put 'hide', params: { channel_id: @channel.id, id: @window.id }
+      expect(response).to be_successful
     end
   end
 
   describe "POST 'update'" do
     it "should allow an update" do
-      post 'update', :channel_id => @channel.id, :page => "{\"col\":0,\"positions\":[#{@window.id}]}"
-      response.should be_success
+      post 'update', params: { channel_id: @channel.id, page: "{\"col\":0,\"positions\":[#{@window.id}]}" }
+      expect(response).to be_successful
     end
   end
 
   describe "POST 'update' with invalid position" do
 
     it "should fail" do
-      post 'update', :channel_id => @channel.id, :page => "{\"col\":0,\"positions\":[999]}"
-      response.should be_success
+      post 'update', params: { channel_id: @channel.id, page: "{\"col\":0,\"positions\":[999]}" }
+      expect(response).to be_successful
     end
   end
   describe "When getting " do
 
     it "should render private_windows json" do
-      get 'private_windows', :channel_id => @channel.id, :format => :json
-      response.should be_successful
+      get 'private_windows', params: { channel_id: @channel.id, format: :json }
+      expect(response).to be_successful
     end
     it "should render show_flag = false" do
       @channel.windows[0].show_flag = false
       @channel.save
-      get 'hidden_windows', {:channel_id => @channel.id, :visibility_flag => "private" }, :format => :json
+      get 'hidden_windows', params: { channel_id: @channel.id, visibility_flag: "private", format: :json }
 
-      response.status.should == 200
+      expect(response.status).to eq(200)
     end
   end
 
@@ -55,23 +55,23 @@ end
 describe WindowsController do
   render_views
   before :each do
-    @channel = FactoryGirl.create(:channel)
-    @window = FactoryGirl.create(:window, html: "<iframe src=\"/\"/>")
+    @channel = FactoryBot.create(:channel)
+    @window = FactoryBot.create(:window, html: "<iframe src=\"/\"/>")
     @channel.windows << @window
   end
 
   describe "POST 'update'" do
     it "should fail with no current user" do
-      post 'update', :channel_id => @channel.id, :page => "{\"col\":0,\"positions\":[" + @window.id.to_s + "]}"
-      response.status.should == 302
+      post 'update', params: { channel_id: @channel.id, page: "{\"col\":0,\"positions\":[" + @window.id.to_s + "]}" }
+      expect(response.status).to eq(302)
     end
   end
 
 
   describe "When getting " do
     it "should render json" do
-      get 'index', :channel_id => @channel.id, :format => :json
-      response.status.should == 200
+      get 'index', params: { channel_id: @channel.id, format: :json }
+      expect(response.status).to eq(200)
       response.body == @channel.windows.to_json
     end
 
@@ -82,30 +82,30 @@ describe WindowsController do
         window.show_flag = false
       end
       saved = @channel.save
-      saved.should be_true
+      expect(saved).to be_truthy
 
-      get 'index', :channel_id => @channel.id, :format => :json
+      get 'index', params: { channel_id: @channel.id, format: :json }
 
-      response.status.should == 200
+      expect(response.status).to eq(200)
 
       result = JSON.parse(response.body)
-      result.size.should == 0
+      expect(result.size).to eq(0)
     end
 
   end
 
   describe "GET 'iframe' for window" do
     it "should return html with gsub for iframe" do
-      get 'iframe', :channel_id => @channel.id, :id => @window.id
-      response.should be_success
-      response.body.should == "<iframe src=\"http://test.host/\"/>"
+      get 'iframe', params: { channel_id: @channel.id, id: @window.id }
+      expect(response).to be_successful
+      expect(response.body).to eq("<iframe src=\"http://test.host/\"/>")
     end
     it "should render json" do
       @channel.windows[0].show_flag = false
       @channel.save
-      get 'index', :channel_id => @channel.id, :format => :json
+      get 'index', params: { channel_id: @channel.id, format: :json }
 
-      response.status.should == 200
+      expect(response.status).to eq(200)
       response.body == @channel.windows.to_json
 
     end
@@ -113,18 +113,17 @@ describe WindowsController do
 
   describe "GET 'html' for window" do
     it "should return html" do
-      get 'html', :channel_id => @channel.id, :id => @window.id
+      get 'html', params: { channel_id: @channel.id, id: @window.id }
 
-      response.should be_success
-      response.body.should == "<iframe src=\"/\"/>"
+      expect(response).to be_successful
+      expect(response.body).to eq("<iframe src=\"/\"/>")
     end
   end
   describe "PUT 'hide' for window" do
     it "should return a redirect to login_path for no current_user" do
-      put 'hide', :channel_id => @channel.id, :id => @window.id
-      response.should redirect_to(login_path)
+      put 'hide', params: { channel_id: @channel.id, id: @window.id }
+      expect(response).to redirect_to(login_path)
     end
   end
 
 end
-

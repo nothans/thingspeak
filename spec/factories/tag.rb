@@ -1,5 +1,5 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :tag do
-    name "Tag name"
+    name { "Tag name" }
   end
 end

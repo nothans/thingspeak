@@ -28,7 +28,7 @@ describe Feed do
 
   it "should not include location in feed.to_json" do
     feed = Feed.new
-    JSON.parse(feed.to_json).keys.include?('location').should eq(false)
+    expect(JSON.parse(feed.to_json).keys.include?('location')).to eq(false)
   end
 
   it "should close the connection when an exception is raised" do
@@ -52,11 +52,10 @@ describe Feed do
       error_message = e.message
     end
 
-    error_message.should eq("Mysql2::Error: closed MySQL connection: SELECT 1")
+    expect(error_message).to eq("Mysql2::Error: closed MySQL connection: SELECT 1")
 
     # check the connection back in afterwards
     ActiveRecord::Base.connection_pool.checkin(connection)
   end
 
 end
-
