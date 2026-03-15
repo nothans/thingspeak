@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   include KeyUtilities
-  skip_before_action :verify_authenticity_token, :only => [:api_login]
   before_action :require_user, :only => [:show, :edit, :update, :edit_profile]
 
   # delete account
