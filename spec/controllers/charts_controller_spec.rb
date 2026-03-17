@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe ChartsController do
+  render_views
   before :each do
     @user = FactoryBot.create(:user)
 
@@ -13,7 +14,6 @@ describe ChartsController do
   end
 
   describe "responding to a GET index" do
-    render_views
     it "has a 'select' selector for 'dynamic'" do
       get :index, params: { channel_id: @channel.id }
       expect(response).to be_successful

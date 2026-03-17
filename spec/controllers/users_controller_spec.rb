@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe UsersController do
+  render_views
   before :each do
     @user = FactoryBot.create(:user)
   end
 
   describe "api" do
-    render_views
 
     it "should show login in public json info" do
       get :profile, params: { glob: @user.login, format: 'json' }

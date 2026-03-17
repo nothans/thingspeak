@@ -22,7 +22,8 @@ require 'spec_helper'
 
 describe Window do
   it "should be valid" do
-    window = Window.new
+    channel = FactoryBot.create(:channel)
+    window = Window.new(channel: channel)
     expect(window).to be_valid
   end
 end

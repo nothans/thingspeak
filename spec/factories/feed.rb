@@ -8,5 +8,6 @@ FactoryBot.define do
     created_at { Time.now - 20.minutes }
     updated_at { Time.now - 20.minutes }
     sequence(:status) {|n| "foo#{n}" }
+    association :channel
   end
 end

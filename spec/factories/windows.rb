@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :window do
-    channel_id { 1 }
+    association :channel
     position { 1 }
     html { "<iframe ::OPTIONS::></iframe>" }
     col { 0 }

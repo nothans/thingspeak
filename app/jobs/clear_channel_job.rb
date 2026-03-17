@@ -4,7 +4,7 @@ class ClearChannelJob
   def self.perform(channel_id)
     # delete feeds
     Feed.delete_in_batches(channel_id)
-    DailyFeed.delete_all(["channel_id = ?", channel_id])
+    DailyFeed.where(channel_id: channel_id).delete_all
     if channel = Channel.find(channel_id)
       channel.last_entry_id = nil
       channel.clearing = false

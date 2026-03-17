@@ -22,7 +22,6 @@ Thingspeak::Application.routes.draw do
       get :home
       get :about
       get :headers
-      get :social_home
       post :contact_us
     end
   end
@@ -43,11 +42,6 @@ Thingspeak::Application.routes.draw do
   resource 'account', controller: 'users'
   resources :users
 
-  # social channels
-  get 's/' => 'pages#social_home'
-  get 's/:slug' => 'channels#social_show', :constraints => { :slug => /.*/ }
-  get 'channels/social_new' => 'channels#social_new'
-
   # search
   resources :tags
 
@@ -62,7 +56,6 @@ Thingspeak::Application.routes.draw do
   get 'channels/:channel_id/feed(s)/last_sum(.:format)' => 'feed#last_sum'
   get 'channels/:channel_id/feed/entry/:id(.:format)' => 'feed#show' # not sure why this doesn't work with (s)
   get 'channels/:channel_id/feeds/entry/:id(.:format)' => 'feed#show' # not sure why this doesn't work with (s)
-  get 'channels/:channel_id/social_feed' => 'channels#social_feed'
   get 'channels/:channel_id/feed(s)/debug' => 'feed#debug'
   delete 'channels/:id/feeds' => 'channels#clear'
 

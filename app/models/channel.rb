@@ -385,15 +385,15 @@ class Channel < ApplicationRecord
   def delete_feeds
     # if a small number of feeds or redis is not present
     if self.feeds.count < 1000 || REDIS_ENABLED == false
-      Feed.delete_all(["channel_id = ?", self.id])
-      DailyFeed.delete_all(["channel_id = ?", self.id])
+      Feed.where(channel_id: self.id).delete_all
+      DailyFeed.where(channel_id: self.id).delete_all
       begin
-        self.update_attribute(:last_entry_id, nil)
+        self.update_column(:last_entry_id, nil)
       rescue Exception => e
       end
     # else delete via background resque job
     else
-      self.update_attribute(:clearing, true)
+      self.update_column(:clearing, true)
       Resque.enqueue(ClearChannelJob, self.id)
     end
   end
@@ -492,7 +492,7 @@ class Channel < ApplicationRecord
     new_ranking += 20 if tags.present?
 
     # update the ranking if it has changed
-    update_attribute(:ranking, new_ranking) if self.ranking != new_ranking
+    update_column(:ranking, new_ranking) if self.ranking != new_ranking
     return new_ranking
   end
 
@@ -548,7 +548,7 @@ class Channel < ApplicationRecord
 
     # set the default channel name
     def set_default_name
-      update_attribute(:name, "#{I18n.t(:channel_default_name)} #{self.id}") if self.name.blank?
+      update_column(:name, "#{I18n.t(:channel_default_name)} #{self.id}") if self.name.blank?
     end
 
 end

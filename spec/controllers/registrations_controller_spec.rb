@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe RegistrationsController do
+  render_views
 
   describe "new account" do
-    render_views
 
     it "should create a new user if user parameters are complete" do
       @request.env["devise.mapping"] = Devise.mappings[:user]
