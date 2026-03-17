@@ -43,6 +43,7 @@ end
 
 group :test do
   gem 'rspec-rails', '~> 7.0'
+  gem 'rails-controller-testing'
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'json_spec'

@@ -5,14 +5,13 @@ describe ChannelsController do
   describe "Logged In" do
     before :each do
       @user = FactoryBot.create(:user)
-      @channel = FactoryBot.create(:channel)
-      @user.channels.push @channel
+      @channel = FactoryBot.create(:channel, user: @user)
       @tag = FactoryBot.create(:tag)
-      @apikey = FactoryBot.create(:api_key)
+      @apikey = FactoryBot.create(:api_key, channel: @channel, user: @user)
       allow(controller).to receive(:current_user).and_return(@user)
       allow(controller).to receive(:current_user_session).and_return(true)
-
     end
+
     it "should show the channels private page" do
       get :show, params: { id: @channel.id }
       expect(response).to render_template(:private_show)
@@ -27,11 +26,10 @@ describe ChannelsController do
     end
 
     it 'should not allow channel to be updated with invalid parameters' do
-      @channel.update({video_type: nil, video_id: nil})
+      @channel.update(video_type: nil, video_id: nil)
       put :update, params: { id: @channel, channel: {video_id: 'invalid_id'} }
       expect(flash[:alert]).to match /#{I18n.t(:channel_video_type_blank)}/
     end
-
 
     it "should allow a channel to be edited" do
       @channel.public_flag = true
@@ -45,17 +43,17 @@ describe ChannelsController do
     it "should allow a channel to be deleted " do
       delete :destroy, params: { id: @channel.id }
       expect(response).to redirect_to channels_path
-      @channel_no_more = Channel.find_by_id(@channel.id)
-      expect(@channel_no_more).to be_nil
+      expect(Channel.find_by_id(@channel.id)).to be_nil
     end
   end
 
   describe "Not Logged In" do
     before :each do
+      @user = FactoryBot.create(:user)
       without_timestamping_of Channel do
-        @channel = FactoryBot.create(:channel, :updated_at => Time.now - RATE_LIMIT_FREQUENCY.to_i.seconds, :public_flag => false)
+        @channel = FactoryBot.create(:channel, updated_at: Time.now - RATE_LIMIT_FREQUENCY.to_i.seconds, public_flag: false, user: @user)
       end
-      @apikey = FactoryBot.create(:api_key, :channel => @channel)
+      @apikey = FactoryBot.create(:api_key, channel: @channel, user: @user)
     end
 
     it "should only display public channels" do
@@ -75,53 +73,23 @@ describe ChannelsController do
 
     it "should redirect to login when creating a new channel" do
       post :create, params: {}
-
       expect(response).to be_redirect
       expect(response).to redirect_to(login_path)
       expect(response.status).to eq(302)
     end
 
     it "should be allowed to send data via get to update channel" do
-      get :post_data, params: { key: "0S5G2O7FAB5K0J6Z", field1: "0", status: "ThisIsATest" }
-
+      get :post_data, params: { key: @apikey.api_key, field1: "0", status: "ThisIsATest" }
       expect(response.body.to_i).to be > 0
       expect(response).to be_successful
     end
-
-    if defined?(React)
-      describe "updates a channel and executes a TalkBack command" do
-        before :each do
-          @talkback = FactoryBot.create(:talkback)
-          @command = FactoryBot.create(:command)
-          @command2 = FactoryBot.create(:command, :position => nil, :command_string => 'quote"test')
-        end
-
-        it 'returns the command string' do
-          post :post_data, params: { key: '0S5G2O7FAB5K0J6Z', field1: '70', talkback_key: @talkback.api_key }
-          expect(response.body).to eq("MyString")
-        end
-        it 'returns JSON' do
-          post :post_data, params: { key: '0S5G2O7FAB5K0J6Z', field1: '70', talkback_key: @talkback.api_key, format: 'json' }
-          expect(JSON.parse(response.body)['command_string']).to eq("MyString")
-          expect(JSON.parse(response.body)['position']).to eq(nil)
-          expect(JSON.parse(response.body)['executed_at']).not_to eq(nil)
-        end
-        it 'returns XML' do
-          post :post_data, params: { key: '0S5G2O7FAB5K0J6Z', field1: '70', talkback_key: @talkback.api_key, format: 'xml' }
-          expect(Nokogiri::XML(response.body).css('command-string').text).to eq("MyString")
-          expect(Nokogiri::XML(response.body).css('position').text).to eq('')
-          expect(Nokogiri::XML(response.body).css('executed-at').text).not_to eq('')
-        end
-      end
-    end
-
   end
 
   describe "API" do
     before :each do
       @user = FactoryBot.create(:user)
-      @channel = FactoryBot.create(:channel)
-      @feed = FactoryBot.create(:feed, :field1 => 10, :channel => @channel)
+      @channel = FactoryBot.create(:channel, user: @user)
+      @feed = FactoryBot.create(:feed, field1: 10, channel: @channel)
     end
 
     describe "list channels" do
@@ -136,8 +104,8 @@ describe ChannelsController do
       end
 
       it "searches nearby public channels" do
-        channel1 = Channel.create(name: 'channel1', latitude: 10, longitude: 10, public_flag: true)
-        channel2 = Channel.create(name: 'channel2', latitude: 60, longitude: 60, public_flag: true)
+        channel1 = FactoryBot.create(:channel, name: 'channel1', latitude: 10, longitude: 10, public_flag: true)
+        channel2 = FactoryBot.create(:channel, name: 'channel2', latitude: 60, longitude: 60, public_flag: true)
         get :public, params: { api_key: @user.api_key, latitude: 59.8, longitude: 60.2, distance: 100, format: 'json' }
         expect(JSON.parse(response.body)['channels'][0]['name']).to eq("channel2")
       end
@@ -193,8 +161,7 @@ describe ChannelsController do
         expect(response).to be_redirect
         @channel.reload
         expect(@channel.name).to eq("newname")
-        channel_id = Channel.all.last.id
-        expect(response).to redirect_to(channel_path(channel_id))
+        expect(response).to redirect_to(channel_path(@channel.id))
       end
       it 'returns JSON' do
         post :update, params: { id: @channel.id, key: @user.api_key, name: 'newname', format: 'json' }

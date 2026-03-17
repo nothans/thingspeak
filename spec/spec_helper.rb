@@ -4,6 +4,8 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'database_cleaner/active_record'
 require 'factory_bot_rails'
+require 'rails/controller/testing'
+Rails::Controller::Testing.install
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
