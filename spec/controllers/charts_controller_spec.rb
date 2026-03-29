@@ -17,7 +17,7 @@ describe ChartsController do
     it "has a 'select' selector for 'dynamic'" do
       get :index, params: { channel_id: @channel.id }
       expect(response).to be_successful
-      expect(response).to have_selector("select#dynamic_0")
+      expect(response.body).to include('select id="dynamic_0"')
     end
   end
 

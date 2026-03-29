@@ -124,7 +124,7 @@ module FeedHelper
     # add feeds to array
     feeds.each do |f|
       i = ((f.created_at - start_time) / seconds).floor
-      f.created_at = start_time + i * seconds
+      f.write_attribute(:created_at, start_time + i * seconds)
       timeslices[i] = f if timeslices[i].nil?
     end
 
@@ -132,7 +132,7 @@ module FeedHelper
     timeslices.each_index do |i|
       if timeslices[i].nil?
         current_feed = empty_feed.dup
-        current_feed.created_at = (start_time + (i * seconds))
+        current_feed.write_attribute(:created_at, start_time + (i * seconds))
         timeslices[i] = current_feed
       end
     end
@@ -158,7 +158,7 @@ module FeedHelper
     # add feeds to array
     feeds.each do |f|
       i = ((f.created_at - start_time) / seconds).floor
-      f.created_at = start_time + i * seconds
+      f.write_attribute(:created_at, start_time + i * seconds)
       # create multidimensional array
       timeslices[i] = [] if timeslices[i].nil?
       timeslices[i].push(f)
@@ -172,12 +172,12 @@ module FeedHelper
       # insert empty values
       if timeslices[i].nil?
         current_feed = empty_feed.dup
-        current_feed.created_at = (start_time + (i * seconds))
+        current_feed.write_attribute(:created_at, start_time + (i * seconds))
         timeslices[i] = current_feed
         # else sum the inner array
       else
         sum_feed = empty_feed.dup
-        sum_feed.created_at = timeslices[i].first.created_at
+        sum_feed.write_attribute(:created_at, timeslices[i].first.created_at)
         # for each feed
         timeslices[i].each do |f|
           # for each attribute, add to sum_feed so that we have the total
@@ -225,7 +225,7 @@ module FeedHelper
     # add feeds to array normalizing created time for timeslices
     feeds.each do |f|
       i = ((f.created_at - start_time) / seconds).floor
-      f.created_at = start_time + i * seconds
+      f.write_attribute(:created_at, start_time + i * seconds)
       # create multidimensional array that will hold all feeds for each timeslice
       timeslices[i] = [] if timeslices[i].nil?
       timeslices[i].push(f)
@@ -239,12 +239,12 @@ module FeedHelper
       # insert empty values if there wasn't a feed value for a slice, just enter an empty feed
       if timeslices[i].nil?
         current_feed = empty_feed.dup
-        current_feed.created_at = (start_time + (i * seconds))
+        current_feed.write_attribute(:created_at, start_time + (i * seconds))
         timeslices[i] = current_feed
         # else average the inner array
       else
         sum_feed = empty_feed.dup
-        sum_feed.created_at = timeslices[i].first.created_at
+        sum_feed.write_attribute(:created_at, timeslices[i].first.created_at)
         # for each feed
         timeslices[i].each do |f|
           # for each attribute, add to sum_feed so that we have the total
@@ -292,7 +292,7 @@ module FeedHelper
     # add feeds to array
     feeds.each do |f|
       i = ((f.created_at - start_time) / seconds).floor
-      f.created_at = start_time + i * seconds
+      f.write_attribute(:created_at, start_time + i * seconds)
       # create multidimensional array
       timeslices[i] = [] if timeslices[i].nil?
       timeslices[i].push(f)
@@ -306,7 +306,7 @@ module FeedHelper
       # insert empty values
       if timeslices[i].nil?
         current_feed = empty_feed.dup
-        current_feed.created_at = (start_time + (i * seconds))
+        current_feed.write_attribute(:created_at, start_time + (i * seconds))
         timeslices[i] = current_feed
         # else get median values for the inner array
       else
@@ -344,7 +344,7 @@ module FeedHelper
 
         # get the median
         median_feed = empty_feed.dup
-        median_feed.created_at = timeslices[i].first.created_at
+        median_feed.write_attribute(:created_at, timeslices[i].first.created_at)
         median_feed.attribute_names.each do |attr|
           median_feed[attr] = object_median(fields[attr], comma_flag, params[:round]) if attr.index('field')
         end
